@@ -243,14 +243,18 @@ header: context {
     #align(right)[
       #text(36pt, weight: "bold")[#title]
       
-      #v(3.5em)
+      #v(0.5em)
       
       #if description != none {
         text(size: 16pt, style: "italic")[#description]
       }
-      
-      #v(0.5em)
-      
+    ]
+  ]
+  
+  v(1fr)
+  
+  pad(right: -9.7cm, bottom: 10%)[
+    #align(right)[
       #if authors.len() > 0 {
         box(inset: (y: 10pt), {
           authors.map(author => {
