@@ -1,8 +1,8 @@
 # Tufted Titmouse
 
-The **tufted titmouse** (_Baeolophus bicolor_) is a small songbird from North America, a species in the tit and chickadee family (Paridae).
+这里会有一张图片
 
 Here is some math:
 $ \int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2} $
-
-![titmouse](../figures/cover-image2.jpg)
+（导出markdown中公式有待完善）
+![titmouse](../figures/duck.jpg)

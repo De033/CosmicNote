@@ -1,4 +1,7 @@
 #import "../index.typ": *
+#import "@preview/cmarker:0.1.8"
+#import "@preview/mitex:0.2.6": *
+
 
 = Typst 功能速览与样例
 
@@ -130,57 +133,7 @@
 你可以使用 `footnote()` 函数添加注释。#footnote[脚注真的很打断阅读体验！]
 ```
 
-你可以使用 `tufted.margin-note()` 函数在任何地方添加任意的*不分段的*边栏内容。例如，你可以添加一行文本图片、行内代码、行内公式等#footnote[`box()` 函数可以将内容设置在一段内。]。
-#tufted.margin-note[
-  #image("../figures/cover-image2.jpg")
-]
-#tufted.margin-note[
-  ⬆️这是一只鸭，这是 `一个行内代码`，这是一个行内公式 $1 + 1 = 2$。\
-  这是换行文本
-]
-
-```typ
-// 这是设置右侧图片和文本的 Typst 代码。
-#tufted.margin-note[
-  #image("../figures/cover-image2.jpg")
-]
-#tufted.margin-note[
-  ⬆️这是一只鸭，这是 `一个行内代码`，这是一个行内公式 $1 + 1 = 2$。\
-  这是换行文本
-]
-```
-
-你可以将参考文献导出为 `.bib` 文件，使用 `bibliography()` 函数将其引用到 Typst中，然后就可以使用 `@` 引用它，就像这样@tufte1973relationship。\
-默认会将使用的参考文献显示在调用 `bibliography()` 函数的位置。模板暂时不支持自动将参考文献展示在边栏中，但你可以手动引用#footnote[Tufte, E. R. (1973). The Relationship between Seats and Votes in Two-Party Systems. _American Political Science Review, 67_(2), 540～554. https://doi.org/10.2307/1958782]。
-
-```typ
-然后就可以使用 `@` 引用它，就像这样@tufte1973relationship。
-你可以手动引用#footnote[Tufte, E. R. (1973). The Relationship between Seats and Votes in Two-Party Systems. _American Political Science Review, 67_(2), 540～554. https://doi.org/10.2307/1958782]。
-```
-
-你甚至可以编写一个 `for` 循环来手动展示 `.bib` 中的文献内容并进行排版：
-
-#{
-  let bib = load-bibliography(read("papers.bib"))
-  for item in bib.values().rev() [
-    #let data = item.fields
-    - #data.author, "#data.title," #emph(data.journal), #data.year. DOI: #link(data.url)[#data.doi]
-  ]
-}
-
-```typ
-#import "@preview/citegeist:0.2.0": load-bibliography
-
-#{
-  let bib = load-bibliography(read("../refs.bib"))
-  for item in bib.values().rev() [
-    #let data = item.fields
-    - #data.author, "#data.title," #emph(data.journal), #data.year. DOI: #link(data.url)[#data.doi]
-  ]
-}
-```
-
-你可以使用 `tufted.full-width()` 将内容以全宽度展现出来，例如这是一张超长的 MIKU：
+你可以使用 `tufted.full-width()` 将内容以全宽度展现出来，例如这是一张超长的图片：
 
 #tufted.full-width[#image("../figures/cover-image2.jpg")]
 
@@ -192,20 +145,41 @@
 
 你可以使用 `figure()` 函数来为任意的内容添加标题信息，特别是图片和表格，这也会显示在侧边栏中。
 
+#tufted.margin-note[
+  #image("../figures/duck.jpg",height: 40%)
+]
+
+你可以使用 `tufted.margin-note()` 函数在任何地方添加任意的*不分段的*边栏内容。例如，你可以添加一行文本图片、行内代码、行内公式等#footnote[`box()` 函数可以将内容设置在一段内。]。但请注意，边栏内容很可能被截断，所以谨慎使用边栏图片这个功能
+
+
+```typ
+// 这是设置右侧图片和文本的 Typst 代码。
+#tufted.margin-note[
+  #image("../figures/duck.jpg",height: 40%)
+]
+#tufted.margin-note[
+  ⬆️这是一只鸭，这是 `一个行内代码`，这是一个行内公式 $1 + 1 = 2$。\
+  这是换行文本
+]
+```
+#tufted.margin-note[
+  ⬆️这是一只鸭，这是 `一个行内代码`，这是一个行内公式 $1 + 1 = 2$。\
+  这是换行文本
+]
 使用 `image()` 函数可以添加图片，使用 `width`、`height` 参数可以控制大小，例如 `figure + image`：
 
 #figure(caption: "这也是鸭鸭。")[
-  #image("../figures/cover-image2.jpg", width: 250pt)
+  #image("../figures/duck.jpg", width: 250pt)
 ]<鸭鸭>
 
-#image("../figures/cover-image2.jpg", height: 250pt)
+#image("../figures/duck.jpg", height: 250pt)
 
 ```typ
 #figure(caption: "这也是鸭鸭。")[
-  #image("../figures/cover-image2.jpg", width: 250pt)
+  #image("../figures/duck.jpg", width: 250pt)
 ]
 
-#image("../figures/cover-image2.jpg", height: 250pt)
+#image("../figures/duck.jpg", height: 250pt)
 ```
 
 
@@ -384,18 +358,13 @@ $
 ]
 ```
 
-超长的块级公式（突破屏幕宽度）：
+超长的块级公式（突破屏幕宽度，不建议这么做）：
 
 $
   Psi(x, t) = sum_(n=1)^infinity c_n phi_n(x) e^(-i E_n t / planck) = integral_(-infinity)^(+infinity) tilde(Psi)(k) e^(i k x - i omega(k) t) d k = e^(i (k x - omega t)) + sum_(l=1)^infinity a_l e^(i (k_l x + phi_l - omega_l t))
 $
 
-$
-  cal(L)_(S M) = underbrace(- 1/4 B_(mu nu) B^(mu nu) - 1/8 tr(bold(W)_(mu nu) bold(W)^(mu nu)) - 1/2 tr(bold(G)_(mu nu) bold(G)^(mu nu)), "Gauge Bosons")
-  + underbrace(sum_(j=1)^3 (bar(Q)_(L j) i D slash Q_(L j) + bar(u)_(R j) i D slash u_(R j) + bar(d)_(R j) i D slash d_(R j) + bar(L)_(L j) i D slash L_(L j) + bar(e)_(R j) i D slash e_(R j)), "Fermions Kinetic Terms")
-  + underbrace((D_mu phi)^dagger (D^mu phi) - mu^2 phi^dagger phi - lambda (phi^dagger phi)^2, "Higgs Sector")
-  - underbrace(sum_(i, j=1)^3 (y_(i j)^u bar(Q)_(L i) tilde(phi) u_(R j) + y_(i j)^d bar(Q)_(L i) phi d_(R j) + y_(i j)^e bar(L)_(L i) phi e_(R j) + h.c.), "Yukawa Couplings")
-$
+
 
 更加复杂的公式和符号写法可参考#link("https://typst-doc-cn.github.io/docs/reference/math/")[官方文档]。
 
