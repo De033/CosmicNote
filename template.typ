@@ -28,12 +28,16 @@
   bibliography-file: none,
   bibstyle: "gb-7714-2015-numeric",
 
+  // 默认采用横屏 A4 尺寸，更适合 Tufte 超宽边栏排版
   paper-size: "a4",
+  flipped: true,
+  // 边距设置：左侧 2.5cm，右侧 12.2cm 超大留白（用于放置 Tufte 侧边栏）
+  page-margin: (left: 2.5cm, right: 12.2cm, top: 2.5cm, bottom: 2.5cm),
 
   fonts: (
     (
-      en-font: "Linux Libertine",
-      zh-font: "LXGW Bright",
+      en-font: "Linux Libertine G", // 可以回退到 Linux Libertine G 等
+      zh-font: "LXGW Bright",     // 默认使用开源的霞鹜文楷/炫光
       code-font: "DejaVu Sans Mono",
     )
   ),
@@ -84,10 +88,11 @@
   // 配置页面
   set page(
     paper: paper-size,
+    flipped: flipped,
     numbering: "1 / 1",
     number-align: center,
     // 页边距
-    margin: (x:1.6cm, y:2.3cm),
+    margin: page-margin,
 
     // 封面图片和背景图片
     background: context {
@@ -122,14 +127,20 @@ header: context {
       }
     ]
 
-    if calc.even(here().page()) == true {
-      emph(chapter-title) + h(1fr) + emph(head-title)
-    } else {
-      emph(head-title) + h(1fr) + emph(chapter-title)
+    let header-content = {
+      if calc.even(here().page()) == true {
+        emph(chapter-title) + h(1fr) + emph(head-title)
+      } else {
+        emph(head-title) + h(1fr) + emph(chapter-title)
+      }
+
+      v(-8pt)
+      // 横线铺满扩充后的整个区域
+      align(center)[#line(length: 100%, stroke: (thickness: 1pt, dash: "solid"))]
     }
 
-    v(-8pt)
-    align(center)[#line(length: 105%, stroke: (thickness: 1pt, dash: "solid"))]
+    // 利用负边距向右侧延伸，使页眉横跨正文区与侧边栏（横屏下延伸 11.2cm）
+    pad(right: -11.2cm, header-content)
 
   },
 
@@ -252,7 +263,7 @@ header: context {
               super(author.affiliations)
             }
             if "github" in author {
-              link(author.github, box(height: 1.1em, baseline: 13.5%)[#image.decode(githubSvg)])
+              link(author.github, box(height: 1.1em, baseline: 13.5%)[#image(bytes(githubSvg))])
             }
           }).join(", ", last: {
             if authors.len() > 2 {
@@ -340,6 +351,8 @@ header: context {
 // 另外的水平标尺
 #let sectionline = align(center)[#v(0.5em) * \* #sym.space.quad \* #sym.space.quad \* * #v(0.5em)]
 
+// removed quote-box to use theorion's
+
 // ==== 使用 showybox 和 ctheorems 包创建盒子 ====
 //
 // |   环境   |  强调色                |
@@ -369,7 +382,7 @@ header: context {
       thickness: (left: 4pt),
       radius: 4pt
     ),
-    title: [#box(height: 0.85em)[#image.decode(nicon)] #name #h(1fr) #ntype #number],
+    title: [#box(height: 0.85em)[#image(bytes(nicon))] #name #h(1fr) #ntype #number],
     body
   )
 }
