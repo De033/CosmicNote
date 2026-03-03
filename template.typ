@@ -239,57 +239,56 @@ header: context {
 
 
   //------------------------------------------------------------------
-  pad(right: -9.7cm)[
-    box(width: 100%, height: 30%)[
-      // 显示论文的标题和描述。
-      #align(right+bottom)[
-        #text(36pt, weight: "bold")[#title]
-        #parbreak()
-        #if description != none {
-          text(size: 16pt, style: "italic")[#description]
-        }
-      ]
-    ]
-
-    box(width: 100%, height: 50%)[
-      #align(right+top)[
-        #if authors.len() > 0 {
-          box(inset: (y: 10pt), {
-            authors.map(author => {
-              text(16pt, weight: "semibold")[
-                #if "homepage" in author {
-                  [#link(author.homepage)[#author.name]]
-                } else { author.name }]
-              if "affiliations" in author {
-                super(author.affiliations)
-              }
-              if "github" in author {
-                link(author.github, box(height: 1.1em, baseline: 13.5%)[#image(bytes(githubSvg))])
-              }
-            }).join(", ", last: {
-              if authors.len() > 2 {
-                ", and"
-              } else {
-                " and"
-              }
-            })
+  pad(right: -9.7cm, top: 15%)[
+    #align(right)[
+      #text(36pt, weight: "bold")[#title]
+      
+      #v(0.5em)
+      
+      #if description != none {
+        text(size: 16pt, style: "italic")[#description]
+      }
+      
+      #v(2em)
+      
+      #if authors.len() > 0 {
+        box(inset: (y: 10pt), {
+          authors.map(author => {
+            text(16pt, weight: "semibold")[
+              #if "homepage" in author {
+                [#link(author.homepage)[#author.name]]
+              } else { author.name }]
+            if "affiliations" in author {
+              super(author.affiliations)
+            }
+            if "github" in author {
+              link(author.github, box(height: 1.1em, baseline: 13.5%)[#image(bytes(githubSvg))])
+            }
+          }).join(", ", last: {
+            if authors.len() > 2 {
+              ", and"
+            } else {
+              " and"
+            }
           })
-        }
-        #v(-2pt, weak: true)
-        #if affiliations.len() > 0 {
-          box(inset: (bottom: 10pt), {
-            affiliations.map(affiliation => {
-              text(12pt)[
-                #super(affiliation.id)#h(1pt)#affiliation.name
-              ]
-            }).join(", ")
-          })
-        }
+        })
+      }
+      
+      #v(-2pt, weak: true)
+      
+      #if affiliations.len() > 0 {
+        box(inset: (bottom: 10pt), {
+          affiliations.map(affiliation => {
+            text(12pt)[
+              #super(affiliation.id)#h(1pt)#affiliation.name
+            ]
+          }).join(", ")
+        })
+      }
 
-        #if date != none {
-          text(12pt, date)
-        }
-      ]
+      #if date != none {
+        text(12pt, date)
+      }
     ]
   ]
   
