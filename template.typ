@@ -243,13 +243,13 @@ header: context {
     #align(right)[
       #text(36pt, weight: "bold")[#title]
       
-      #v(0.5em)
+      #v(3.5em)
       
       #if description != none {
         text(size: 16pt, style: "italic")[#description]
       }
       
-      #v(2em)
+      #v(0.5em)
       
       #if authors.len() > 0 {
         box(inset: (y: 10pt), {
